@@ -1,0 +1,75 @@
+//authentication state (requests authentication from server)
+
+USER username
+
++OK send PASS
+
+PASS password
+
++OK POP3 server ready
+
+QUIT(terminates connection)
+
++OK
+
+//transaction state
+
+STAT(retrieves amount of mails in mail list)
+
++OK 2(number of mails) 320(size in octets)
+
+LIST[mail number](mail number is optional)(retrieve a list of mails locks session)
+
+//response types
++OK scan listing follows
+-ERR no such message
+
+//examples
++OK 2 messages (320 octets)
+1 120
+2 200
+.
+
+RETR[mail numer](retrieve a specific mail)
+
++OK 1823 octets
+(message with format as shown at the bottom of this document)
+.
+
+
+
+DELETE[mail number](mail number is required)(mark mail for deletion)
+
++OK message deleted
+-ERR no such message
+
+//update state
+
+QUIT(deletes mails marked for deletion then terminates connection)
+
++OK
+-ERR some deleted messages not removed
+
+
+//pop3 email example
+
+//header 
+Return-Path: <xxxxx@gmail.com>
+Received: from  (bf240.xxx.xxxx.com. [61.197.23.240])
+        by mx.google.com with ESMTPS id pb4sm20464671pbc.55.2012.05.13.17.56.12
+        (version=SSLv3 cipher=OTHER);
+        Sun, 13 May 2012 17:56:13 -0700 (PDT)
+Message-ID: <4fc05e2d.e4a9440a.302b.ffffe399@mx.google.com>
+Date: Mon, 14 May 2012 00:56:10 +0900
+From: xxxxx@gmail.com
+Subject: Test
+Content-Transfer-Encoding: Quoted-Printable
+Content-Disposition: inline
+Mime-Version: 1.0
+Reply-To: xxxxx@hotmail.com
+X-Priority: 3
+To: yyyyy@gmail.com
+Content-Type: text/plain; charset="ASCII"
+
+//body
+mail content hier
